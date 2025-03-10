@@ -1,4 +1,4 @@
-# Template for policies for use in Compliance Framework plugins
+# Baseline set of EC2 policies for use in Compliance Framework plugins
 
 ## Testing
 
