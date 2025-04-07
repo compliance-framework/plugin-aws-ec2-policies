@@ -1,4 +1,4 @@
-package compliance_framework.template.aws._deny_public_ip
+package compliance_framework.deny_deny_public_ip
 
 test_violation_with_public_ip if {
     count(violation) == 1 with input as {

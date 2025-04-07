@@ -1,5 +1,13 @@
-package compliance_framework.template.aws._deny_unencrypted_root_volume
+package compliance_framework.deny_unencrypted_root_volume
 
+violation[{}] if {
+  some bdm in input.BlockDeviceMappings
+  bdm.DeviceName == input.RootDeviceName
+  not bdm.Ebs.Encrypted
+}
+
+title := "EC2 Instance encrypts it's root volume"
+description := "EC2 Instances should encrypt their root EBS volume to ensure cryptographicly secure cloud operations"
 controls := [
     # SAMA Cyber Security Framework v1.0
     # https://rulebook.sama.gov.sa/en/cyber-security-framework-2
@@ -42,19 +50,3 @@ controls := [
         "control-id": "3.2.8",
     },
 ]
-
-violation[{
-    "title": "EC2 instance is launched with the default security group",
-    "description": sprintf("Instance '%v' is using the default security group", [input.InstanceID]),
-    "remarks": "Ensure EC2 instances are not launched with the default security group. Define custom security groups with appropriate rules."
-}] if {
-    input.SecurityGroups[_].GroupName == "default"
-}
-
-violation[{
-  "title": "Root volume is not encrypted",
-}] if {
-  some bdm in input.BlockDeviceMappings
-  bdm.DeviceName == input.RootDeviceName
-  not bdm.Ebs.Encrypted
-}

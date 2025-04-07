@@ -1,5 +1,12 @@
-package compliance_framework.template.aws._deny_public_ip
+package compliance_framework.deny_deny_public_ip
 
+violation[{}] if {
+    input.PublicIP != ""
+    input.PublicIP != null
+}
+
+title := "EC2 Instance does not expose a Public IP"
+description := "EC2 Instance has no public IP assigned in AWS and only has private IPs"
 controls := [
     # SAMA Cyber Security Framework v1.0
     # https://rulebook.sama.gov.sa/en/cyber-security-framework-2
@@ -47,12 +54,3 @@ controls := [
         "control-id": "3.2.3",
     },
 ]
-
-violation[{
-    "title": "Check to ensure EC2 instance does not have a public IP",
-    "description": sprintf("Instance '%v' has a public IP address, which is not allowed.", [input.InstanceID]),
-    "remarks": "Ensure the EC2 instance does not have a public IP address."
-}] if {
-    input.PublicIP != ""
-    input.PublicIP != null
-}
