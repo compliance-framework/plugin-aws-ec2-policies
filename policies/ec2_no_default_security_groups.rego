@@ -1,6 +1,11 @@
+package compliance_framework.deny_default_sg
 
-package compliance_framework.template.aws._deny_default_sg
+violation[{}] if {
+    input.SecurityGroups[_].GroupName == "default"
+}
 
+title := "EC2 Instance has explicit security group"
+description := "EC2 Instance should be launched using an explicit security group, and avoid using the default security group."
 controls := [
     # SAMA Cyber Security Framework v1.0
     # https://rulebook.sama.gov.sa/en/cyber-security-framework-2
@@ -49,10 +54,3 @@ controls := [
     },
 ]
 
-violation[{
-    "title": "EC2 instance is launched with the default security group",
-    "description": sprintf("Instance '%v' is using the default security group", [input.InstanceID]),
-    "remarks": "Ensure EC2 instances are not launched with the default security group. Define custom security groups with appropriate rules."
-}] if {
-    input.SecurityGroups[_].GroupName == "default"
-}

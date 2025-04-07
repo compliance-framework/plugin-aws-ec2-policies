@@ -1,4 +1,4 @@
-package compliance_framework.template.aws._deny_unencrypted_root_volume
+package compliance_framework.deny_unencrypted_root_volume
 
 test_violation_unencrypted_root_volume if {
   violation[_] with input as {

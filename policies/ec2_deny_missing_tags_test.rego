@@ -1,4 +1,4 @@
-package compliance_framework.template.aws._deny_missing_tags
+package compliance_framework.deny_missing_tags
 
 test_violation_with_missing_tags if {
     count(violation) == 1 with input as {
