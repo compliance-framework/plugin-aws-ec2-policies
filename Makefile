@@ -1,17 +1,20 @@
-# Makefile for building and pushing OPA policies to a registry
+# The help target prints out all targets with their descriptions organized
+# beneath their categories. The categories are represented by '##@' and the
+# target descriptions by '##'. The awk commands is responsible for reading the
+# entire set of makefiles included in this invocation, looking for lines of the
+# file as xyz: ## something, and then pretty-format the target and help. Then,
+# if there's a line with ##@ something, that gets pretty-printed as a category.
+# More info on the usage of ANSI catalog characters for terminal formatting:
+# https://en.wikipedia.org/wiki/ANSI_escape_code#SGR_parameters
+# More info on the awk command:
+# http://linuxcommand.org/lc3_adv_awk.php
 
-# Variables
-REGISTRY_URL := ghcr.io
-NAMESPACE := chris-cmsoft
-POLICY_NAME := local-ssh-policies
-VERSION := latest
-POLICY_DIR := ./ssh # Directory containing your .rego files
+##@ Help
+help: ## Display this concise help, ie only the porcelain target
+	@awk 'BEGIN {FS = ":.*##"; printf "\033[1mUsage\033[0m\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?##/ { printf "  \033[36m%-30s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
-# Build and Push Commands
-.PHONY: all build bundle push clean
-
-# Default action
-all: test check build push clean
+help-all: ## Display all help items, ie including plumbing targets
+	@awk 'BEGIN {FS = ":.*#"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_0-9-]+:.*?#/ { printf "  \033[36m%-25s\033[0m %s\n", $$1, $$2 } /^#@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
 # Check if OPA CLI is installed
 OPA := $(shell command -v opa 2> /dev/null)
@@ -19,47 +22,12 @@ ifeq ($(OPA),)
 $(error "opa CLI not found. Please install it: https://www.openpolicyagent.org/docs/latest/cli/")
 endif
 
-# Check if Docker CLI is installed
-
-CONTAINER_CLI := ""
-DOCKER := $(shell command -v docker 2> /dev/null)
-PODMAN := $(shell command -v podman 2> /dev/null)
-ifeq ($(DOCKER),)
-	PODMAN := := $(shell command -v podman 2> /dev/null)
-	ifeq ($(PODMAN),)
-		$(error "either docker or podman CLI is required.")
-	else
-		CONTAINER_CLI = PODMAN
-	endif
-else
-	CONTAINER_CLI = DOCKER
-endif
-
-test:
-	@echo "Testing policies..."
-	@OPA test policies
-
-# Build the policies
-check:
-	@echo "Checking policies..."
-	@opa check policies
-
-# Bundle the policies into a tarball for OCI registry
-build: clean
-	@echo "Bundling policies..."
-	@mkdir -p dist/
+##@ Policies
+build: ## Build the OPA bundle
 	@opa build -b policies -o dist/bundle.tar.gz
 
-# Push the bundled policies to an OCI-compliant registry
-push: build
-	@echo "Pushing bundle to registry..."
-	@# Log in to the registry if necessary
-	@$(CONTAINER_CLI) login $(REGISTRY_URL)
-	@# Push the bundle as an OCI artifact
-	@$(CONTAINER_CLI) cp dist/bundle.tar.gz $(REGISTRY_URL)/$(NAMESPACE)/$(POLICY_NAME):$(VERSION)
-	@echo "Bundle pushed successfully to $(REGISTRY_URL)/$(NAMESPACE)/$(POLICY_NAME):$(VERSION)"
+validate: ## Build the OPA bundle
+	@opa check policies
 
-# Clean up build artifacts
-clean:
-	@echo "Cleaning up..."
-	@rm -f dist/bundle.tar.gz
+test: ## Test the OPA policies
+	@opa test policies
