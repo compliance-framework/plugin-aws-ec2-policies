@@ -1,7 +1,7 @@
 package compliance_framework.deny_default_sg
 
 violation[{}] if {
-    input.SecurityGroups[_].GroupName == "default"
+    input.instance.SecurityGroups[_].GroupName == "default"
 }
 
 title := "EC2 Instance has explicit security group"

@@ -1,9 +1,7 @@
 package compliance_framework.deny_missing_tags
 
-required_tags := ["Environment","Security","Compliance","Application","Cost Center","Project","Owner","Name"]
-
 violation[{}] if {
-    missing_tags := {tag | tag := required_tags[_]; not tag_exists(input.Tags, tag)}
+    missing_tags := {tag | tag := data.required_tags[_]; not tag_exists(input.instance.Tags, tag)}
     count(missing_tags) > 0
 }
 

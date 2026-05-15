@@ -1,9 +1,11 @@
 package compliance_framework.deny_unencrypted_root_volume
 
 violation[{}] if {
-  some bdm in input.BlockDeviceMappings
-  bdm.DeviceName == input.RootDeviceName
-  not bdm.Ebs.Encrypted
+  some bdm in input.instance.BlockDeviceMappings
+  bdm.DeviceName == input.instance.RootDeviceName
+  some volume in input.volumes
+  volume.VolumeId == bdm.Ebs.VolumeId
+  not volume.Encrypted
 }
 
 title := "EC2 Instance encrypts it's root volume"
