@@ -5,5 +5,12 @@ violation[{}] if {
     input.instance.PublicIpAddress != null
 }
 
+violation[{}] if {
+    some interface in object.get(input.instance, "NetworkInterfaces", [])
+    association := object.get(interface, "Association", {})
+    public_ip := object.get(association, "PublicIp", "")
+    public_ip != ""
+}
+
 title := "EC2 Instance does not expose a Public IP"
 description := "EC2 Instance has no public IP assigned in AWS and only has private IPs"

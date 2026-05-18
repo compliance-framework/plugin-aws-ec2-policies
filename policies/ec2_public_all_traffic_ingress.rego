@@ -2,6 +2,11 @@ package compliance_framework.public_all_traffic_ingress
 
 violation[{}] if {
     attached_security_group_ids[group_id]
+    not security_group_in_inventory(group_id)
+}
+
+violation[{}] if {
+    attached_security_group_ids[group_id]
     security_group_allows_public_all_traffic_ingress(group_id)
 }
 
@@ -10,6 +15,12 @@ attached_security_group_ids[group_id] if {
     some security_group in object.get(instance, "SecurityGroups", [])
     group_id := object.get(security_group, "GroupId", "")
     group_id != ""
+}
+
+security_group_in_inventory(group_id) if {
+    group_id != ""
+    some security_group in object.get(input, "security_groups", [])
+    object.get(security_group, "GroupId", "") == group_id
 }
 
 security_group_allows_public_all_traffic_ingress(group_id) if {

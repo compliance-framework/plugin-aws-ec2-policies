@@ -13,3 +13,17 @@ test_violation_unencrypted_root_volume if {
     ]
   }
 }
+
+test_no_violation_encrypted_root_volume if {
+  count(violation) == 0 with input as {
+    "instance": {
+      "RootDeviceName": "/dev/xvda",
+      "BlockDeviceMappings": [
+        {"DeviceName": "/dev/xvda", "Ebs": {"VolumeId": "vol-123"}}
+      ]
+    },
+    "volumes": [
+      {"VolumeId": "vol-123", "Encrypted": true}
+    ]
+  }
+}

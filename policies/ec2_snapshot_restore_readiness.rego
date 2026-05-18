@@ -75,7 +75,8 @@ required_fast_restore_zone := zone if {
 }
 
 required_fast_restore_zone := zone if {
-    not object.get(input, "recovery_objective.availability_zone", "")
+    recovery_zone := object.get(object.get(input, "recovery_objective", {}), "availability_zone", "")
+    recovery_zone == ""
     instance := object.get(input, "instance", {})
     placement := object.get(instance, "Placement", {})
     zone := object.get(placement, "AvailabilityZone", "")
