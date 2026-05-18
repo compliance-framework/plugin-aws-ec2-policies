@@ -70,3 +70,90 @@ test_no_violation_with_enabled_dlm_policy_with_retention_matching_instance_tags 
         ]
     }
 }
+
+test_violation_with_disabled_dlm_policy if {
+    count(violation) == 1 with input as {
+        "account_id": "123456789012",
+        "instance": {
+            "InstanceId": "i-1234567890abcdef0",
+            "BlockDeviceMappings": [
+                {"DeviceName": "/dev/sda1", "Ebs": {"VolumeId": "vol-001"}}
+            ],
+            "Tags": [
+                {"Key": "Backup", "Value": "required"}
+            ]
+        },
+        "snapshots": [],
+        "dlm_policies": [
+            {
+                "State": "DISABLED",
+                "PolicyDetails": {
+                    "TargetTags": [
+                        {"Key": "Backup", "Value": "required"}
+                    ],
+                    "Schedules": [
+                        {"Name": "daily", "RetainRule": {"Count": 7}}
+                    ]
+                }
+            }
+        ]
+    }
+}
+
+test_violation_with_dlm_policy_without_retention if {
+    count(violation) == 1 with input as {
+        "account_id": "123456789012",
+        "instance": {
+            "InstanceId": "i-1234567890abcdef0",
+            "BlockDeviceMappings": [
+                {"DeviceName": "/dev/sda1", "Ebs": {"VolumeId": "vol-001"}}
+            ],
+            "Tags": [
+                {"Key": "Backup", "Value": "required"}
+            ]
+        },
+        "snapshots": [],
+        "dlm_policies": [
+            {
+                "State": "ENABLED",
+                "PolicyDetails": {
+                    "TargetTags": [
+                        {"Key": "Backup", "Value": "required"}
+                    ],
+                    "Schedules": [
+                        {"Name": "daily", "RetainRule": {"Count": 0}}
+                    ]
+                }
+            }
+        ]
+    }
+}
+
+test_violation_with_dlm_policy_non_matching_target_tags if {
+    count(violation) == 1 with input as {
+        "account_id": "123456789012",
+        "instance": {
+            "InstanceId": "i-1234567890abcdef0",
+            "BlockDeviceMappings": [
+                {"DeviceName": "/dev/sda1", "Ebs": {"VolumeId": "vol-001"}}
+            ],
+            "Tags": [
+                {"Key": "Backup", "Value": "required"}
+            ]
+        },
+        "snapshots": [],
+        "dlm_policies": [
+            {
+                "State": "ENABLED",
+                "PolicyDetails": {
+                    "TargetTags": [
+                        {"Key": "Environment", "Value": "production"}
+                    ],
+                    "Schedules": [
+                        {"Name": "daily", "RetainRule": {"Count": 7}}
+                    ]
+                }
+            }
+        ]
+    }
+}

@@ -116,16 +116,6 @@ instance_matches_target_tag(tag) if {
 }
 
 instance_matches_target_tag(tag) if {
-    is_object(tag)
-    key := object.get(tag, "Key", "")
-    key != ""
-    object.get(tag, "Value", "") == ""
-    instance := object.get(input, "instance", {})
-    some instance_tag in object.get(instance, "Tags", [])
-    lower(object.get(instance_tag, "Key", "")) == lower(key)
-}
-
-instance_matches_target_tag(tag) if {
     is_string(tag)
     contains(tag, "=")
     parts := split(tag, "=")
@@ -136,14 +126,6 @@ instance_matches_target_tag(tag) if {
     some instance_tag in object.get(instance, "Tags", [])
     lower(object.get(instance_tag, "Key", "")) == lower(key)
     lower(object.get(instance_tag, "Value", "")) == lower(value)
-}
-
-instance_matches_target_tag(tag) if {
-    is_string(tag)
-    not contains(tag, "=")
-    instance := object.get(input, "instance", {})
-    some instance_tag in object.get(instance, "Tags", [])
-    lower(object.get(instance_tag, "Key", "")) == lower(tag)
 }
 
 title := "EC2 / EBS workloads have backup coverage"
