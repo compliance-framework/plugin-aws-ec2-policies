@@ -113,3 +113,19 @@ test_no_violation_when_fast_restore_required_zone_falls_back_to_instance_placeme
         ]
     }
 }
+
+test_violation_with_multi_volume_one_uncovered if {
+    count(violation) == 1 with input as {
+        "account_id": "123456789012",
+        "instance": {
+            "BlockDeviceMappings": [
+                {"DeviceName": "/dev/sda1", "Ebs": {"VolumeId": "vol-001"}},
+                {"DeviceName": "/dev/sdb", "Ebs": {"VolumeId": "vol-002"}}
+            ],
+            "Placement": {"AvailabilityZone": "eu-west-2a"}
+        },
+        "snapshots": [
+            {"SnapshotId": "snap-001", "VolumeId": "vol-001", "State": "completed", "OwnerId": "123456789012"}
+        ]
+    }
+}
