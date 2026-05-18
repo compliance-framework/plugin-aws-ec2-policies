@@ -92,3 +92,24 @@ test_violation_when_fast_restore_enabled_in_different_zone_than_required if {
         ]
     }
 }
+
+test_no_violation_when_fast_restore_required_zone_falls_back_to_instance_placement if {
+    count(violation) == 0 with input as {
+        "account_id": "123456789012",
+        "instance": {
+            "BlockDeviceMappings": [
+                {"DeviceName": "/dev/sda1", "Ebs": {"VolumeId": "vol-001"}}
+            ],
+            "Placement": {"AvailabilityZone": "eu-west-2a"}
+        },
+        "snapshots": [
+            {"SnapshotId": "snap-001", "VolumeId": "vol-001", "State": "completed", "OwnerId": "123456789012"}
+        ],
+        "recovery_objective": {
+            "requires_fast_snapshot_restore": true
+        },
+        "fast_snapshot_restores": [
+            {"SnapshotId": "snap-001", "AvailabilityZone": "eu-west-2a", "State": "enabled"}
+        ]
+    }
+}

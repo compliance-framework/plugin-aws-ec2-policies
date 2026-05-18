@@ -118,10 +118,10 @@ instance_matches_target_tag(tag) if {
 instance_matches_target_tag(tag) if {
     is_string(tag)
     contains(tag, "=")
-    parts := split(tag, "=")
-    count(parts) == 2
-    key := parts[0]
-    value := parts[1]
+    matches := regex.find_all_string_submatch_n("([^=]+)=(.*)", tag, -1)
+    count(matches) > 0
+    key := matches[0][1]
+    value := matches[0][2]
     instance := object.get(input, "instance", {})
     some instance_tag in object.get(instance, "Tags", [])
     lower(object.get(instance_tag, "Key", "")) == lower(key)

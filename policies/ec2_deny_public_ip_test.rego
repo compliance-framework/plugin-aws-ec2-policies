@@ -33,3 +33,19 @@ test_violation_with_network_interface_public_ip if {
         }
     }
 }
+
+test_violation_with_network_interface_ipv6_address if {
+    count(violation) == 1 with input as {
+        "instance": {
+            "InstanceId": "i-1234567890abcdef0",
+            "PublicIpAddress": "",
+            "NetworkInterfaces": [
+                {
+                    "Ipv6Addresses": [
+                        {"Ipv6Address": "2001:db8::1"}
+                    ]
+                }
+            ]
+        }
+    }
+}
