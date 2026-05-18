@@ -79,3 +79,15 @@ test_no_violation_when_attached_sg_does_not_allow_public_all_traffic_ingress if 
         ]
     }
 }
+
+test_violation_when_attached_sg_missing_from_inventory if {
+    count(violation) == 1 with input as {
+        "instance": {
+            "InstanceId": "i-1234567890abcdef0",
+            "SecurityGroups": [
+                {"GroupId": "sg-001", "GroupName": "missing-sg"}
+            ]
+        },
+        "security_groups": []
+    }
+}

@@ -10,6 +10,7 @@ violation[{}] if {
     association := object.get(interface, "Association", {})
     public_ip := object.get(association, "PublicIp", "")
     public_ip != ""
+    public_ip != null
 }
 
 title := "EC2 Instance does not expose a Public IP"

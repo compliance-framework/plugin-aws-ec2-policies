@@ -17,3 +17,19 @@ test_no_violation_without_public_ip if {
         }
     }
 }
+
+test_violation_with_network_interface_public_ip if {
+    count(violation) == 1 with input as {
+        "instance": {
+            "InstanceId": "i-1234567890abcdef0",
+            "PublicIpAddress": "",
+            "NetworkInterfaces": [
+                {
+                    "Association": {
+                        "PublicIp": "203.0.113.1"
+                    }
+                }
+            ]
+        }
+    }
+}

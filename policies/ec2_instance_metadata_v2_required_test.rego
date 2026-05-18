@@ -32,3 +32,11 @@ test_no_violation_when_metadata_endpoint_is_disabled if {
         }
     }
 }
+
+test_violation_when_metadata_options_omitted if {
+    count(violation) == 1 with input as {
+        "instance": {
+            "InstanceId": "i-1234567890abcdef0"
+        }
+    }
+}

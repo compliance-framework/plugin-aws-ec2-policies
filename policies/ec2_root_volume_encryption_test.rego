@@ -27,3 +27,15 @@ test_no_violation_encrypted_root_volume if {
     ]
   }
 }
+
+test_violation_root_volume_missing_from_inventory if {
+  count(violation) == 1 with input as {
+    "instance": {
+      "RootDeviceName": "/dev/xvda",
+      "BlockDeviceMappings": [
+        {"DeviceName": "/dev/xvda", "Ebs": {"VolumeId": "vol-123"}}
+      ]
+    },
+    "volumes": []
+  }
+}
