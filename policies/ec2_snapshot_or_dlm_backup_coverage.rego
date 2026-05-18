@@ -40,11 +40,6 @@ snapshot_covers_volume(snapshot, volume_id) if {
 
 snapshot_is_owned(snapshot) if {
     account_id := object.get(input, "account_id", "")
-    account_id == ""
-}
-
-snapshot_is_owned(snapshot) if {
-    account_id := object.get(input, "account_id", "")
     account_id != ""
     object.get(snapshot, "OwnerId", "") == account_id
 }

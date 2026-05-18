@@ -38,11 +38,6 @@ snapshot_covers_volume(snapshot, volume_id) if {
 
 snapshot_is_owned(snapshot) if {
     account_id := object.get(input, "account_id", "")
-    account_id == ""
-}
-
-snapshot_is_owned(snapshot) if {
-    account_id := object.get(input, "account_id", "")
     account_id != ""
     object.get(snapshot, "OwnerId", "") == account_id
 }
@@ -80,6 +75,7 @@ required_fast_restore_zone := zone if {
 }
 
 required_fast_restore_zone := zone if {
+    not object.get(input, "recovery_objective.availability_zone", "")
     instance := object.get(input, "instance", {})
     placement := object.get(instance, "Placement", {})
     zone := object.get(placement, "AvailabilityZone", "")
