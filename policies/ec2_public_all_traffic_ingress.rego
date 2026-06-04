@@ -1,11 +1,37 @@
 package compliance_framework.public_all_traffic_ingress
 
-violation[{}] if {
+risk_templates := [{
+    "name": "EC2 attached security group ingress is not compliant",
+    "title": "EC2 internet ingress exposure",
+    "statement": "One or more security groups attached to the EC2 instance allow unrestricted inbound traffic from public IPv4 or IPv6 sources, increasing the likelihood of unauthorized network access.",
+    "likelihood_hint": "high",
+    "impact_hint": "high",
+    "violation_ids": ["ec2_public_all_traffic_ingress_not_compliant"],
+    "threat_refs": [
+        {
+            "system": "https://cwe.mitre.org",
+            "external_id": "CWE-284",
+            "title": "Improper Access Control",
+            "url": "https://cwe.mitre.org/data/definitions/284.html"
+        }
+    ],
+    "remediation": {
+        "title": "Restrict public all-traffic ingress on attached security groups",
+        "description": "Ensure security groups attached to the EC2 instance do not permit all inbound traffic from 0.0.0.0/0 or ::/0 unless that exposure is explicitly intended and approved.",
+        "tasks": [
+            {"title": "Remove any inbound rule that permits all protocols from public IPv4 or IPv6 ranges"},
+            {"title": "Replace broad exposure with the minimum required ports, protocols, and source ranges"},
+            {"title": "Confirm the plugin can resolve all attached security groups in the collected inventory"}
+        ]
+    }
+}]
+
+violation[{"id": "ec2_public_all_traffic_ingress_not_compliant"}] if {
     attached_security_group_ids[group_id]
     not security_group_in_inventory(group_id)
 }
 
-violation[{}] if {
+violation[{"id": "ec2_public_all_traffic_ingress_not_compliant"}] if {
     attached_security_group_ids[group_id]
     security_group_allows_public_all_traffic_ingress(group_id)
 }

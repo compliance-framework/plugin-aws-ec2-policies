@@ -1,11 +1,37 @@
 package compliance_framework.backup_artifact_approved_kms_encryption
 
-violation[{}] if {
+risk_templates := [{
+    "name": "EC2 backup artifact encryption is not compliant",
+    "title": "EC2 backup artifact encryption gap",
+    "statement": "Attached EBS volumes or recoverable snapshots for the EC2 workload are not encrypted, increasing the risk that live data or backup artifacts can be read outside approved key protections.",
+    "likelihood_hint": "medium",
+    "impact_hint": "high",
+    "violation_ids": ["ec2_backup_artifact_encryption_not_compliant"],
+    "threat_refs": [
+        {
+            "system": "https://cwe.mitre.org",
+            "external_id": "CWE-311",
+            "title": "Missing Encryption of Sensitive Data",
+            "url": "https://cwe.mitre.org/data/definitions/311.html"
+        }
+    ],
+    "remediation": {
+        "title": "Keep attached volumes and recoverable snapshots encrypted",
+        "description": "Ensure attached EBS volumes and completed in-scope snapshots remain encrypted across the workload recovery path.",
+        "tasks": [
+            {"title": "Confirm every attached volume is encrypted"},
+            {"title": "Ensure completed snapshots for in-scope volumes are encrypted"},
+            {"title": "Update backup and image creation paths so new artifacts inherit encryption by default"}
+        ]
+    }
+}]
+
+violation[{"id": "ec2_backup_artifact_encryption_not_compliant"}] if {
     attached_volume_ids[volume_id]
     not volume_is_encrypted(volume_id)
 }
 
-violation[{}] if {
+violation[{"id": "ec2_backup_artifact_encryption_not_compliant"}] if {
     some snapshot in object.get(input, "snapshot_inventory", [])
     snapshot_is_in_scope(snapshot)
     not snapshot_is_encrypted(snapshot)
