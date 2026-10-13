@@ -1,0 +1,3 @@
+lisa-design:
+- Layer 1 of a two-PR stack (spec W2-S4-T02 size rule): pure `opa fmt -w policies` output from OPA 1.14.1, nothing hand-edited. Raw diff 1880 lines (>1000), so formatting is split from the workflow change in ra/w2-s4-t02-shared-ci.
+- Equivalence proven: parsed AST (locations/comments stripped) identical for all 20 files; opa eval of data.compliance_framework over 208 inputs byte-identical to main.
