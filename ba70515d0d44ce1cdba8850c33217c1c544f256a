@@ -3,3 +3,6 @@ lisa-design:
 - Manifest seeded at 0.4.0 = releases/latest v0.4.0 (final); tag commit 3c8f2c5 is an ancestor of main, so no bootstrap-sha.
 - No version.txt added by hand; release-please adds it in the first release PR.
 - README unchanged: it covers testing and `make build`, not releasing.
+
+lisa-selfreview:
+- Pass 1: no findings. Diff matches the reviewed batch-1 reference; config has no drift from defaults.json at v1.5.2; actionlint clean; OPA 1.14.1 check/test (40/40)/build pass; old and new opa build commands give byte-identical bundles.
