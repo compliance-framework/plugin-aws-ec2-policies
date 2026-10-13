@@ -1,0 +1,4 @@
+lisa-design:
+- Regal unassigned-return-value (5 sites): bare `object.get(x, k, false)` body expressions rewritten as `object.get(x, k, false) != false`, not `== true`. Rego treats any defined non-false value as truthy (null, "false", 0, {} all pass today), so `!= false` is the exact equivalent; `== true` would change behaviour. Verified per value on main vs branch.
+- Regal unresolved-reference on `data.required_tags` (only in policies/data.json, which Regal doesn't read): line-scoped trailing `# regal ignore:unresolved-reference`, no repo .regal config (it would replace the shared config CI uses).
+- Regal warnings (67) are deliberately left as they are (user decision 2026-10-13: errors only).
