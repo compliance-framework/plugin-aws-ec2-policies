@@ -47,7 +47,7 @@ volume_is_encrypted(volume_id) if {
 	attached_volume_ids[volume_id]
 	some volume in object.get(input, "volumes", [])
 	object.get(volume, "VolumeId", "") == volume_id
-	object.get(volume, "Encrypted", false)
+	object.get(volume, "Encrypted", false) != false
 }
 
 snapshot_is_in_scope(snapshot) if {
@@ -58,7 +58,7 @@ snapshot_is_in_scope(snapshot) if {
 }
 
 snapshot_is_encrypted(snapshot) if {
-	object.get(snapshot, "encrypted", false)
+	object.get(snapshot, "encrypted", false) != false
 }
 
 title := "EC2 backup artifacts remain encrypted"
