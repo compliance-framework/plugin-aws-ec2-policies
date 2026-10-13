@@ -1,0 +1,5 @@
+lisa-design:
+- Callers copied from mock-plugin-policies-1 (identical to the merged batch-1 reference plugin-file-attestation-policies#4) with every pin at v1.5.2; push branch main (the default branch).
+- Manifest seeded at 0.4.0 = releases/latest v0.4.0 (final); tag commit 3c8f2c5 is an ancestor of main, so no bootstrap-sha.
+- No version.txt added by hand; release-please adds it in the first release PR.
+- README unchanged: it covers testing and `make build`, not releasing.
