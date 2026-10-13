@@ -44,7 +44,7 @@ snapshot_is_owned(snapshot) if {
 
 recovery_objective_requires_fast_restore if {
 	recovery_objective := object.get(input, "recovery_objective", {})
-	object.get(recovery_objective, "requires_fast_snapshot_restore", false)
+	object.get(recovery_objective, "requires_fast_snapshot_restore", false) != false
 }
 
 workload_has_required_fast_restore if {

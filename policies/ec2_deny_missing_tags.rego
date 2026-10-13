@@ -1,7 +1,7 @@
 package compliance_framework.deny_missing_tags
 
 violation[{}] if {
-	missing_tags := {tag | tag := data.required_tags[_]; not tag_exists(input.instance.Tags, tag)}
+	missing_tags := {tag | tag := data.required_tags[_]; not tag_exists(input.instance.Tags, tag)} # regal ignore:unresolved-reference
 	count(missing_tags) > 0
 }
 

@@ -64,7 +64,7 @@ snapshot_is_public(snapshot) if {
 	snapshot_id := object.get(snapshot, "snapshot_id", "")
 	some permission in object.get(input, "snapshot_permissions", [])
 	object.get(permission, "snapshot_id", "") == snapshot_id
-	object.get(permission, "public_share_enabled", false)
+	object.get(permission, "public_share_enabled", false) != false
 }
 
 snapshot_is_public(snapshot) if {
@@ -76,7 +76,7 @@ snapshot_is_public(snapshot) if {
 }
 
 snapshot_is_public(snapshot) if {
-	object.get(snapshot, "public_share_enabled", false)
+	object.get(snapshot, "public_share_enabled", false) != false
 }
 
 title := "EC2 snapshots have constrained restore access"
