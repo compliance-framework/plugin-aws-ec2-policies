@@ -1,35 +1,23 @@
 package compliance_framework.deny_public_ip
 
 test_violation_with_public_ip if {
-    count(violation) == 1 with input as {
-        "instance": {
-            "InstanceId": "i-1234567890abcdef0",
-            "PublicIpAddress": "203.0.113.0"
-        }
-    }
+	count(violation) == 1 with input as {"instance": {
+		"InstanceId": "i-1234567890abcdef0",
+		"PublicIpAddress": "203.0.113.0",
+	}}
 }
 
 test_no_violation_without_public_ip if {
-    count(violation) == 0 with input as {
-        "instance": {
-            "InstanceId": "i-1234567890abcdef0",
-            "PublicIpAddress": ""
-        }
-    }
+	count(violation) == 0 with input as {"instance": {
+		"InstanceId": "i-1234567890abcdef0",
+		"PublicIpAddress": "",
+	}}
 }
 
 test_violation_with_network_interface_public_ip if {
-    count(violation) == 1 with input as {
-        "instance": {
-            "InstanceId": "i-1234567890abcdef0",
-            "PublicIpAddress": "",
-            "NetworkInterfaces": [
-                {
-                    "Association": {
-                        "PublicIp": "203.0.113.1"
-                    }
-                }
-            ]
-        }
-    }
+	count(violation) == 1 with input as {"instance": {
+		"InstanceId": "i-1234567890abcdef0",
+		"PublicIpAddress": "",
+		"NetworkInterfaces": [{"Association": {"PublicIp": "203.0.113.1"}}],
+	}}
 }

@@ -1,13 +1,13 @@
 package compliance_framework.deny_missing_tags
 
 violation[{}] if {
-    missing_tags := {tag | tag := data.required_tags[_]; not tag_exists(input.instance.Tags, tag)}
-    count(missing_tags) > 0
+	missing_tags := {tag | tag := data.required_tags[_]; not tag_exists(input.instance.Tags, tag)}
+	count(missing_tags) > 0
 }
 
 tag_exists(tags, tag_name) if {
-    some tag in tags
-     lower(tag.Key) == lower(tag_name)
+	some tag in tags
+	lower(tag.Key) == lower(tag_name)
 }
 
 title := "EC2 Instance sets correct tags"
