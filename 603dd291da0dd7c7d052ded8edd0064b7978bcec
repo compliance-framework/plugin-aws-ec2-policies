@@ -1,0 +1,2 @@
+lisa-selfreview:
+- pass 1 (rules: core, rego-policy): no findings on this PR's own diff; verdict approve. Pre-existing, out of scope (behaviour must not change), listed in the PR body instead: no METADATA blocks; deny_missing_tags, snapshot_or_dlm_backup_coverage and snapshot_restore_readiness have no risk_templates and emit `violation[{}]` without an id (REGO-RISK-001/REGO-VIOL-001); boolean flags treat null/"false"/0 as true (open question); release.yml/build-and-upload.yml use mutable action refs (W3 replaces them).
